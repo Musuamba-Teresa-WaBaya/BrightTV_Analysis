@@ -27,14 +27,14 @@ SELECT
 
     -- 3. Duration & Engagement Tracking
     Duration2,
-    DATE_FORMAT(Duration2, 'HH:mm:ss') AS Duration_Time,         -- String representation of timestamp duration
-    
-    CASE 
-        WHEN UNIX_TIMESTAMP(Duration2) / 60 BETWEEN 0 AND 1   THEN 'Glancer'
-        WHEN UNIX_TIMESTAMP(Duration2) / 60 BETWEEN 2 AND 15  THEN 'Casual Viewer'
-        WHEN UNIX_TIMESTAMP(Duration2) / 60 BETWEEN 16 AND 45 THEN 'Standard Show'
-        WHEN UNIX_TIMESTAMP(Duration2) / 60 BETWEEN 46 AND 120 THEN 'Feature Watcher'
-        WHEN UNIX_TIMESTAMP(Duration2) / 60 > 120              THEN 'Heavy Binge Viewer'
+    (HOUR(Duration2) * 60) + MINUTE(Duration2) AS Duration_Minutes,  --- Extracting just the HH:mm:ss from the default base date timestamp of the duration column 
+
+CASE 
+        WHEN (HOUR(Duration2) * 60) + MINUTE(Duration2) BETWEEN 0 AND 1    THEN 'Glancer'
+        WHEN (HOUR(Duration2) * 60) + MINUTE(Duration2) BETWEEN 2 AND 15   THEN 'Casual Viewer'
+        WHEN (HOUR(Duration2) * 60) + MINUTE(Duration2) BETWEEN 16 AND 45  THEN 'Standard Show'
+        WHEN (HOUR(Duration2) * 60) + MINUTE(Duration2) BETWEEN 46 AND 120 THEN 'Feature Watcher'
+        WHEN (HOUR(Duration2) * 60) + MINUTE(Duration2) > 120              THEN 'Heavy Binge Viewer'
         ELSE 'Duration_Missing'
     END AS Engagement_Category,
 
