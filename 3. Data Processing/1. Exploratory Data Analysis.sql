@@ -64,11 +64,6 @@ SET RecordDate2_SAST = from_utc_timestamp(RecordDate2, 'Africa/Johannesburg');
 ALTER TABLE `workspace`.`default`.`bright_tv_viewership` 
 DROP COLUMN RecordDate2;
 
-
--- ----------------------------------------------------------------------------------------------
--- STEP 4: Data Consolidation (Full Outer Integration)
--- ----------------------------------------------------------------------------------------------
-
 -- ----------------------------------------------------------------------------------------------
 -- STEP 4: Data Consolidation (Full Outer Integration via Coalesce)
 -- ----------------------------------------------------------------------------------------------
@@ -94,7 +89,7 @@ FROM workspace.default.BrightTV_Combined;
 
 
 -- ----------------------------------------------------------------------------------------------
--- STEP 5: Exploratory Data Profiling & Field Profiling
+-- STEP 5: Exploratory Data Profiling 
 -- ----------------------------------------------------------------------------------------------
 
 Select count(Distinct(UserID)) AS Number_of_records ---5375 unique UserIDs / Profiles 
@@ -125,27 +120,26 @@ from `workspace`.`default`.`BrightTV_Combined`;
 -- ----------------------------------------------------------------------------------------------
 -- Handling NULL Values 
 
-Select UserID, 
-    IFNULL(CAST(RecordDate2_SAST AS STRING), 'Date_Missing') AS RECORDDATE_SAST,
-    IFNULL(Duration2, 'Duration_Missing') AS DURATION,
-    IFNULL(Channel2, 'Channel_Missing') AS CHANNEL12,
-    IFNULL(Gender, 'Gender_Missing') AS GENDER, 
-    IFNULL(CAST(Age AS STRING), 'Age_Missing') AS AGE,
-    IFNULL(Race, 'Race_Missing') AS RACE, 
-    IFNULL(Province, 'Province_Missing') AS PROVINCE
-from `workspace`.`default`.`BrightTV_Combined`;
+UPDATE `workspace`.`default`.`BrightTV_Combined`
+SET 
+    Channel2 = IFNULL(Channel2, 'Channel_Missing'),
+    Gender   = IFNULL(Gender, 'Gender_Missing'),
+    Race     = IFNULL(Race, 'Race_Missing'),
+    Province = IFNULL(Province, 'Province_Missing');
 
 --Splitting record date into a date and time columns
 
+   select RecordDate2_SAST,                                             
     --  Extracting just the Date (YYYY-MM-DD)
     CAST(RecordDate2_SAST AS DATE) AS Viewing_Date,
     --  Extracting just the Time (HH:MM:SS)
-    DATE_FORMAT(RecordDate2_SAST, 'HH:mm:ss') AS Viewing_Time
+   DATE_FORMAT(RecordDate2_SAST, 'HH:mm:ss') AS Viewing_Time
 FROM `workspace`.`default`.`BrightTV_Combined`;
 
---Extracting the specific duration
-
+ --Extracting the specific duration
+       
 SELECT Duration2,
     -- Extracts just the HH:mm:ss from the default base date timestamp
     DATE_FORMAT(Duration2, 'HH:mm:ss') AS Duration
+    
 FROM `workspace`.`default`.`BrightTV_Combined`;
