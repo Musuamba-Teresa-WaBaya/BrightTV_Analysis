@@ -1,8 +1,7 @@
 -- ==========================================================================================================================================================================================
 -- PROJECT: BrightTV Viewership Analysis
 -- PHASE: Data Exploration & Data Cleaning (EDA)
--- DESCRIPTION: Standardizing missing values, adjusting timezones to SAST, merging datasets, 
---              and formatting date/time features for analysis.
+-- DESCRIPTION: Standardizing missing values, adjusting timezones to SAST, merging datasets, and formatting date/time features for analysis.
 -- ============================================================================================================================================================================================
 
 -- ----------------------------------------------------------------------------------------------
@@ -46,7 +45,7 @@ SET
     `Social Media Handle` = NULLIF(TRIM(`Social Media Handle`), '');
 
 -- ----------------------------------------------------------------------------------------------
--- STEP 3: Localization (Converting UTC to South African Standard Time)
+-- STEP 3: Converting UTC to South African Standard Time
 -- ----------------------------------------------------------------------------------------------
 
 ---3. Converting UTC time to SA time
@@ -65,7 +64,7 @@ ALTER TABLE `workspace`.`default`.`bright_tv_viewership`
 DROP COLUMN RecordDate2;
 
 -- ----------------------------------------------------------------------------------------------
--- STEP 4: Data Consolidation (Full Outer Integration via Coalesce)
+-- STEP 4: Data JOINING (Full Outer Join with Coalesce)
 -- ----------------------------------------------------------------------------------------------
 -- Merging demographics and behavioral data streams without losing orphan nodes on either side.
 
