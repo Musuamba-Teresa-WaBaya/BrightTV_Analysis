@@ -83,7 +83,7 @@ Used SQL to analyse:
 - Indian/Asian women are the most underserved at 5.9% female share within their group, despite Indian/Asian men being the longest-watching group on the platform (13.2 min avg)
 
 
-### Recommendations
+# Recommendations
 
 #### Content Strategy
 
